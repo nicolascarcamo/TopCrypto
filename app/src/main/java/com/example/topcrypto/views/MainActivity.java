@@ -28,9 +28,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -82,33 +88,30 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 // on below line calling a
                 // method to filter our array list
-                filter(s.toString());
             }
         });
     }
 
-    private void filter(String filter) {
+    private void filter(ArrayList<com.example.topcrypto.views.CurrencyModal> list) {
         // on below line we are creating a new array list
         // for storing our filtered data.
-        ArrayList<com.example.topcrypto.views.CurrencyModal> filteredlist = new ArrayList<>();
-        // running a for loop to search the data from our array list.
-        for (com.example.topcrypto.views.CurrencyModal item : currencyModalArrayList) {
-            // on below line we are getting the item which are
-            // filtered and adding it to filtered list.
-            if (item.getName().toLowerCase().contains(filter.toLowerCase())) {
-                filteredlist.add(item);
+        // running a for loop to search the data from our array list
+
+        Collections.sort(list, new Comparator<CurrencyModal>() {
+            @Override
+            public int compare(com.example.topcrypto.views.CurrencyModal p1, com.example.topcrypto.views.CurrencyModal p2) {
+                return new Double((double) p2.getPrice()).compareTo(new Double((double) p1.getPrice()));
             }
+        });
+
+        ArrayList<CurrencyModal> filteredList = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            //filteredList.set(i, list.get(i));
+            filteredList.add(list.get(i));
         }
-        // on below line we are checking
-        // weather the list is empty or not.
-        if (filteredlist.isEmpty()) {
-            // if list is empty we are displaying a toast message.
-            Toast.makeText(this, "No currency found..", Toast.LENGTH_SHORT).show();
-        } else {
-            // on below line we are calling a filter
-            // list method to filter our list.
-            currencyRVAdapter.filterList(filteredlist);
-        }
+
+        currencyRVAdapter.filterList(filteredList);
     }
 
     private void getData() {
@@ -138,7 +141,9 @@ public class MainActivity extends AppCompatActivity {
                         // adding all data to our array list.
                         currencyModalArrayList.add(new com.example.topcrypto.views.CurrencyModal(name, symbol, price));
                     }
+                    //Collections.sort(currencyModalArrayList);
                     // notifying adapter on data change.
+                    filter(currencyModalArrayList);
                     currencyRVAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     // handling json exception.

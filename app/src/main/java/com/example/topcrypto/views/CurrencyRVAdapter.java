@@ -1,5 +1,6 @@
 package com.example.topcrypto.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.example.topcrypto.R;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 // on below line we are creating our adapter class
 // in this class we are passing our array list
@@ -28,12 +30,18 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Cu
     }
 
     // below is the method to filter our list.
+
     public void filterList(ArrayList<com.example.topcrypto.views.CurrencyModal> filterlist) {
         // adding filtered list to our
         // array list and notifying data set changed
+
         currencyModals = filterlist;
         notifyDataSetChanged();
     }
+
+
+
+
 
     @NonNull
     @Override
@@ -43,6 +51,7 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Cu
         // on below line we are inflating our layout file.
         View view = LayoutInflater.from(context).inflate(R.layout.currency_rv_item, parent, false);
         return new CurrencyRVAdapter.CurrencyViewholder(view);
+
     }
 
     @Override
@@ -50,6 +59,7 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Cu
         // on below line we are setting data to our item of
         // recycler view and all its views.
         com.example.topcrypto.views.CurrencyModal modal = currencyModals.get(position);
+
         holder.nameTV.setText(modal.getName());
         holder.rateTV.setText("$ " + df2.format(modal.getPrice()));
         holder.symbolTV.setText(modal.getSymbol());
@@ -76,4 +86,5 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Cu
             nameTV = itemView.findViewById(R.id.idTVName);
         }
     }
+
 }

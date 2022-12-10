@@ -36,4 +36,5 @@ public class CurrencyModal {
     public void setPrice(double price) {
         this.price = price;
     }
+
 }
