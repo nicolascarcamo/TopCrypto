@@ -1,4 +1,4 @@
-package com.example.topcrypto.views;
+package com.example.topcrypto;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import com.example.topcrypto.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,8 +17,8 @@ import com.android.volley.Request;
 
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+//import com.android.volley.Response;
+//import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -28,15 +27,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
+//import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
+
+//View
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
     // adapter, array list, progress bar
     private RecyclerView currencyRV;
     private EditText searchEdt;
-    private ArrayList<com.example.topcrypto.views.CurrencyModal> currencyModalArrayList;
-    private com.example.topcrypto.views.CurrencyRVAdapter currencyRVAdapter;
+    private ArrayList<CurrencyModal> currencyModalArrayList;
+    private CurrencyRVAdapter currencyRVAdapter;
     private ProgressBar loadingPB;
 
     @Override
@@ -60,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         currencyModalArrayList = new ArrayList<>();
 
         // initializing our adapter class.
-        currencyRVAdapter = new com.example.topcrypto.views.CurrencyRVAdapter(currencyModalArrayList, this);
+        currencyRVAdapter = new CurrencyRVAdapter(currencyModalArrayList, this);
 
         // setting layout manager to recycler view.
         currencyRV.setLayoutManager(new LinearLayoutManager(this));
@@ -92,17 +89,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void filter(ArrayList<com.example.topcrypto.views.CurrencyModal> list) {
+    private void filter(ArrayList<CurrencyModal> list) {
         // on below line we are creating a new array list
         // for storing our filtered data.
         // running a for loop to search the data from our array list
 
-        Collections.sort(list, new Comparator<CurrencyModal>() {
-            @Override
-            public int compare(com.example.topcrypto.views.CurrencyModal p1, com.example.topcrypto.views.CurrencyModal p2) {
-                return new Double((double) p2.getPrice()).compareTo(new Double((double) p1.getPrice()));
-            }
-        });
+        Collections.sort(list, (p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
 
         ArrayList<CurrencyModal> filteredList = new ArrayList<>();
 
@@ -120,43 +112,37 @@ public class MainActivity extends AppCompatActivity {
         // creating a variable for request queue.
         RequestQueue queue = Volley.newRequestQueue(this);
         // making a json object request to fetch data from API.
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                // inside on response method extracting data
-                // from response and passing it to array list
-                // on below line we are making our progress
-                // bar visibility to gone.
-                loadingPB.setVisibility(View.GONE);
-                try {
-                    // extracting data from json.
-                    JSONArray dataArray = response.getJSONArray("data");
-                    for (int i = 0; i < dataArray.length(); i++) {
-                        JSONObject dataObj = dataArray.getJSONObject(i);
-                        String symbol = dataObj.getString("symbol");
-                        String name = dataObj.getString("name");
-                        JSONObject quote = dataObj.getJSONObject("quote");
-                        JSONObject USD = quote.getJSONObject("USD");
-                        double price = USD.getDouble("price");
-                        // adding all data to our array list.
-                        currencyModalArrayList.add(new com.example.topcrypto.views.CurrencyModal(name, symbol, price));
-                    }
-                    //Collections.sort(currencyModalArrayList);
-                    // notifying adapter on data change.
-                    filter(currencyModalArrayList);
-                    currencyRVAdapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    // handling json exception.
-                    e.printStackTrace();
-                    Toast.makeText(MainActivity.this, "Something went amiss. Please try again later", Toast.LENGTH_SHORT).show();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            // inside on response method extracting data
+            // from response and passing it to array list
+            // on below line we are making our progress
+            // bar visibility to gone.
+            loadingPB.setVisibility(View.GONE);
+            try {
+                // extracting data from json.
+                JSONArray dataArray = response.getJSONArray("data");
+                for (int i = 0; i < dataArray.length(); i++) {
+                    JSONObject dataObj = dataArray.getJSONObject(i);
+                    String symbol = dataObj.getString("symbol");
+                    String name = dataObj.getString("name");
+                    JSONObject quote = dataObj.getJSONObject("quote");
+                    JSONObject USD = quote.getJSONObject("USD");
+                    double price = USD.getDouble("price");
+                    // adding all data to our array list.
+                    currencyModalArrayList.add(new CurrencyModal(name, symbol, price));
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // displaying error response when received any error.
+                //Collections.sort(currencyModalArrayList);
+                // notifying adapter on data change.
+                filter(currencyModalArrayList);
+                currencyRVAdapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                // handling json exception.
+                e.printStackTrace();
                 Toast.makeText(MainActivity.this, "Something went amiss. Please try again later", Toast.LENGTH_SHORT).show();
             }
+        }, error -> {
+            // displaying error response when received any error.
+            Toast.makeText(MainActivity.this, "Something went amiss. Please try again later", Toast.LENGTH_SHORT).show();
         }) {
             @Override
             public Map<String, String> getHeaders() {

@@ -1,5 +1,5 @@
-package com.example.topcrypto.views;
-
+package com.example.topcrypto;
+// Model
 public class CurrencyModal {
     // variable for currency name,
     // currency symbol and price.
@@ -17,24 +17,24 @@ public class CurrencyModal {
         return name;
     }
 
-    public void setName(String name) {
+    /*public void setName(String name) {
         this.name = name;
-    }
+    }*/
 
     public String getSymbol() {
         return symbol;
     }
 
-    public void setSymbol(String symbol) {
+    /*public void setSymbol(String symbol) {
         this.symbol = symbol;
-    }
+    }*/
 
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    /*public void setPrice(double price) {
         this.price = price;
-    }
+    }*/
 
 }

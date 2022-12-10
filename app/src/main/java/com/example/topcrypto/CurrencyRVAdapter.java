@@ -1,6 +1,5 @@
-package com.example.topcrypto.views;
-
-import android.annotation.SuppressLint;
+package com.example.topcrypto;
+//ViewModel
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,28 +9,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.topcrypto.R;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 
 // on below line we are creating our adapter class
 // in this class we are passing our array list
 // and our View Holder class which we have created.
 public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.CurrencyViewholder> {
     private static DecimalFormat df2 = new DecimalFormat("#.##");
-    private ArrayList<com.example.topcrypto.views.CurrencyModal> currencyModals;
+    private ArrayList<CurrencyModal> currencyModals;
     private Context context;
 
-    public CurrencyRVAdapter(ArrayList<com.example.topcrypto.views.CurrencyModal> currencyModals, Context context) {
+    public CurrencyRVAdapter(ArrayList<CurrencyModal> currencyModals, Context context) {
         this.currencyModals = currencyModals;
         this.context = context;
     }
 
     // below is the method to filter our list.
 
-    public void filterList(ArrayList<com.example.topcrypto.views.CurrencyModal> filterlist) {
+    public void filterList(ArrayList<CurrencyModal> filterlist) {
         // adding filtered list to our
         // array list and notifying data set changed
 
@@ -58,7 +54,7 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Cu
     public void onBindViewHolder(@NonNull CurrencyRVAdapter.CurrencyViewholder holder, int position) {
         // on below line we are setting data to our item of
         // recycler view and all its views.
-        com.example.topcrypto.views.CurrencyModal modal = currencyModals.get(position);
+        CurrencyModal modal = currencyModals.get(position);
 
         holder.nameTV.setText(modal.getName());
         holder.rateTV.setText("$ " + df2.format(modal.getPrice()));
