@@ -1,5 +1,7 @@
 package com.example.topcrypto;
 
+//functionalities of View
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -90,16 +92,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void filter(ArrayList<CurrencyModal> list) {
-        // on below line we are creating a new array list
-        // for storing our filtered data.
-        // running a for loop to search the data from our array list
+        // filter function sorts given list, and creates a new one using first 10 elements
 
         Collections.sort(list, (p1, p2) -> Double.compare(p2.getPrice(), p1.getPrice()));
 
         ArrayList<CurrencyModal> filteredList = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            //filteredList.set(i, list.get(i));
             filteredList.add(list.get(i));
         }
 
@@ -131,9 +130,9 @@ public class MainActivity extends AppCompatActivity {
                     // adding all data to our array list.
                     currencyModalArrayList.add(new CurrencyModal(name, symbol, price));
                 }
-                //Collections.sort(currencyModalArrayList);
-                // notifying adapter on data change.
+                //run through filter before displaying
                 filter(currencyModalArrayList);
+                // notifying adapter on data change.
                 currencyRVAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 // handling json exception.

@@ -27,11 +27,11 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Cu
 
     // below is the method to filter our list.
 
-    public void filterList(ArrayList<CurrencyModal> filterlist) {
+    public void filterList(ArrayList<CurrencyModal> filteredlist) {
         // adding filtered list to our
         // array list and notifying data set changed
 
-        currencyModals = filterlist;
+        currencyModals = filteredlist;
         notifyDataSetChanged();
     }
 
